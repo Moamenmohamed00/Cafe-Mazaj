@@ -1,0 +1,72 @@
+@model Cafe_Mazaj.Models.Entities.Reservation
+@{
+    ViewData["Title"] = "Reservation Detail";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h6 class="admin-card-title">Reservation #@Model.Id</h6>
+                <a asp-area="Admin" asp-controller="Reservation" asp-action="Index" class="btn-admin-outline btn-sm">← Back</a>
+            </div>
+            <div class="admin-card-body">
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="admin-form-label">Customer Name</div>
+                        <div class="fw-semibold">@Model.CustomerName</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="admin-form-label">Phone</div>
+                        <div><a href="tel:@Model.Phone" style="color:var(--admin-primary)">@Model.Phone</a></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="admin-form-label">Date</div>
+                        <div class="fw-semibold">@Model.ReservationDate.ToString("dddd, dd MMMM yyyy")</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="admin-form-label">Guests</div>
+                        <div class="fw-semibold">@Model.GuestCount</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="admin-form-label">Notes</div>
+                        <div style="color:var(--admin-muted)">@(Model.Notes ?? "—")</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="admin-form-label">Status</div>
+                        <span class="admin-badge badge-@Model.Status.ToLower() fs-6">@Model.Status</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="admin-form-label">Submitted</div>
+                        <div style="color:var(--admin-muted)">@Model.CreatedAt.ToString("dd MMM yyyy, HH:mm")</div>
+                    </div>
+                </div>
+
+                @if (Model.Status == "Pending")
+                {
+                    <hr style="border-color:var(--admin-border)" />
+                    <div class="d-flex gap-2">
+                        <form asp-area="Admin" asp-controller="Reservation" asp-action="Approve" asp-route-id="@Model.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <button class="btn-admin-primary" type="submit"
+                                    data-confirm="Approve this reservation?">
+                                <i class="bi bi-check-circle"></i> Approve
+                            </button>
+                        </form>
+                        <form asp-area="Admin" asp-controller="Reservation" asp-action="Reject" asp-route-id="@Model.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-outline-danger btn-sm" type="submit"
+                                    data-confirm="Reject this reservation?">
+                                <i class="bi bi-x-circle"></i> Reject
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+}

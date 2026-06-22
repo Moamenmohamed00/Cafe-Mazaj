@@ -1,0 +1,371 @@
+@model Cafe_Mazaj.Models.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "كافيه مزاج | Cafe Mazaj";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<section class="hero-section" id="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-overlay"></div>
+    <div class="container hero-content text-center">
+        <p class="hero-eyebrow gsap-fade-up">
+            <span data-lang-ar>مرحباً بكم في</span>
+            <span data-lang-en style="display:none">Welcome to</span>
+        </p>
+        <h1 class="hero-title gsap-fade-up">
+            <span data-lang-ar>كافيه مزاج</span>
+            <span data-lang-en style="display:none">Cafe Mazaj</span>
+        </h1>
+        <p class="hero-tagline gsap-fade-up">
+            <span data-lang-ar>حيث تلتقي القهوة الفاخرة بأجمل الأجواء</span>
+            <span data-lang-en style="display:none">Where premium coffee meets the finest ambiance</span>
+        </p>
+        <div class="hero-actions gsap-fade-up d-flex gap-3 justify-content-center flex-wrap">
+            <a asp-controller="Reservation" asp-action="Index" class="btn cafe-btn-primary btn-lg">
+                <i class="bi bi-calendar-check me-2"></i>
+                <span data-lang-ar>احجز طاولة</span>
+                <span data-lang-en style="display:none">Reserve a Table</span>
+            </a>
+            <a asp-controller="Menu" asp-action="Index" class="btn cafe-btn-outline btn-lg">
+                <i class="bi bi-cup-hot me-2"></i>
+                <span data-lang-ar>عرض القائمة</span>
+                <span data-lang-en style="display:none">View Menu</span>
+            </a>
+        </div>
+        <div class="hero-scroll-hint">
+            <i class="bi bi-chevron-double-down"></i>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════ ABOUT ═══════════════════════════ -->
+<section class="about-section section-padding" id="about">
+    <div class="container">
+        <div class="row align-items-center gy-5">
+            <div class="col-lg-6 gsap-slide-right">
+                <div class="about-image-wrap">
+                    <div class="about-img-placeholder">
+                        <i class="bi bi-cup-hot-fill"></i>
+                    </div>
+                    <div class="about-badge">
+                        <span class="badge-year">2020</span>
+                        <span class="badge-text" data-lang-ar>تأسست</span>
+                        <span class="badge-text" data-lang-en style="display:none">Est.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 gsap-slide-left">
+                <div class="section-label">
+                    <span data-lang-ar>قصتنا</span>
+                    <span data-lang-en style="display:none">Our Story</span>
+                </div>
+                <h2 class="section-title">
+                    <span data-lang-ar>أكثر من مجرد قهوة</span>
+                    <span data-lang-en style="display:none">More Than Just Coffee</span>
+                </h2>
+                <p class="section-body">
+                    <span data-lang-ar>كافيه مزاج هو وجهة فريدة تجمع بين أجود أنواع القهوة والمشروبات الفاخرة، مع أجواء دافئة تجعلك تشعر بالراحة والانتماء. نؤمن بأن كل كوب قهوة هو تجربة متكاملة.</span>
+                    <span data-lang-en style="display:none">Cafe Mazaj is a unique destination that brings together the finest coffees and premium beverages in a warm atmosphere that makes you feel at home. We believe every cup of coffee is a complete experience.</span>
+                </p>
+                <div class="about-stats row mt-4">
+                    <div class="col-4 text-center">
+                        <div class="stat-number" data-target="5">0</div>
+                        <div class="stat-label" data-lang-ar>سنوات خبرة</div>
+                        <div class="stat-label" data-lang-en style="display:none">Years</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="stat-number" data-target="50">0</div>
+                        <div class="stat-label" data-lang-ar>+صنف بالقائمة</div>
+                        <div class="stat-label" data-lang-en style="display:none">Menu Items</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="stat-number" data-target="10000">0</div>
+                        <div class="stat-label" data-lang-ar>+عميل سعيد</div>
+                        <div class="stat-label" data-lang-en style="display:none">Happy Guests</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════ MENU PREVIEW ═══════════════════════════ -->
+<section class="menu-preview-section section-padding" id="menu-preview">
+    <div class="container">
+        <div class="text-center mb-5 gsap-fade-up">
+            <div class="section-label">
+                <span data-lang-ar>قائمتنا</span>
+                <span data-lang-en style="display:none">Our Menu</span>
+            </div>
+            <h2 class="section-title">
+                <span data-lang-ar>أبرز ما نقدم</span>
+                <span data-lang-en style="display:none">Featured Items</span>
+            </h2>
+        </div>
+        <div class="row g-4 product-grid">
+            @foreach (var product in Model.FeaturedProducts)
+            {
+                <div class="col-md-6 col-lg-4 gsap-card">
+                    <div class="product-card">
+                        <div class="product-img-wrap">
+                            @if (!string.IsNullOrEmpty(product.ImagePath))
+                            {
+                                <img src="@product.ImagePath" alt="@product.NameEn" class="product-img" loading="lazy" />
+                            }
+                            else
+                            {
+                                <div class="product-img-placeholder"><i class="bi bi-cup-hot"></i></div>
+                            }
+                            <div class="product-price-badge">@product.Price EGP</div>
+                        </div>
+                        <div class="product-body">
+                            <div class="product-category">@product.Category?.NameEn</div>
+                            <h3 class="product-name">
+                                <span data-lang-ar>@product.NameAr</span>
+                                <span data-lang-en style="display:none">@product.NameEn</span>
+                            </h3>
+                            <p class="product-desc">
+                                <span data-lang-ar>@product.DescriptionAr</span>
+                                <span data-lang-en style="display:none">@product.DescriptionEn</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="text-center mt-5 gsap-fade-up">
+            <a asp-controller="Menu" asp-action="Index" class="btn cafe-btn-primary btn-lg">
+                <span data-lang-ar>عرض القائمة الكاملة</span>
+                <span data-lang-en style="display:none">View Full Menu</span>
+                <i class="bi bi-arrow-left ms-2" data-lang-ar></i>
+                <i class="bi bi-arrow-right me-2" data-lang-en style="display:none"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════ TESTIMONIALS ═══════════════════════════ -->
+<section class="testimonials-section section-padding" id="testimonials">
+    <div class="container">
+        <div class="text-center mb-5 gsap-fade-up">
+            <div class="section-label">
+                <span data-lang-ar>آراء عملائنا</span>
+                <span data-lang-en style="display:none">What Guests Say</span>
+            </div>
+            <h2 class="section-title">
+                <span data-lang-ar>تجارب حقيقية</span>
+                <span data-lang-en style="display:none">Real Experiences</span>
+            </h2>
+        </div>
+        <div class="testimonials-track">
+            @{
+                var testimonials = new[]
+                {
+                    new { NameAr = "أحمد محمود", NameEn = "Ahmed Mahmoud", TextAr = "أفضل مقهى جربته في القاهرة! القهوة رائعة والأجواء مريحة جداً.", TextEn = "Best cafe I've tried in Cairo! Amazing coffee and very comfortable atmosphere.", Stars = 5 },
+                    new { NameAr = "سارة خالد", NameEn = "Sara Khaled", TextAr = "كابتشينو رائع والخدمة محترمة جداً. أنصح الجميع بتجربته.", TextEn = "Amazing cappuccino and very professional service. I recommend everyone to try it.", Stars = 5 },
+                    new { NameAr = "محمد علي", NameEn = "Mohamed Ali", TextAr = "مكان هادئ وجميل، مناسب للعمل والاسترخاء. سأعود بالتأكيد!", TextEn = "A quiet and beautiful place, perfect for work and relaxation. I'll definitely be back!", Stars = 5 },
+                    new { NameAr = "نور الدين", NameEn = "Nour Eldin", TextAr = "الحلويات لذيذة جداً والديكور رائع. تجربة لا تُنسى.", TextEn = "Delicious desserts and amazing décor. An unforgettable experience.", Stars = 5 },
+                };
+            }
+            @foreach (var t in testimonials)
+            {
+                <div class="testimonial-card gsap-card">
+                    <div class="testimonial-stars">
+                        @for (int i = 0; i < t.Stars; i++)
+                        {
+                            <i class="bi bi-star-fill"></i>
+                        }
+                    </div>
+                    <p class="testimonial-text">
+                        <span data-lang-ar>@t.TextAr</span>
+                        <span data-lang-en style="display:none">@t.TextEn</span>
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">@t.NameEn[0]</div>
+                        <div>
+                            <span data-lang-ar>@t.NameAr</span>
+                            <span data-lang-en style="display:none">@t.NameEn</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════ RESERVATION ═══════════════════════════ -->
+<section class="reservation-section section-padding" id="reservation">
+    <div class="container">
+        <div class="reservation-card">
+            <div class="row gy-4 align-items-center">
+                <div class="col-lg-5 gsap-slide-right">
+                    <div class="section-label light">
+                        <span data-lang-ar>احجز مكانك</span>
+                        <span data-lang-en style="display:none">Book Your Spot</span>
+                    </div>
+                    <h2 class="section-title light">
+                        <span data-lang-ar>احجز طاولتك الآن</span>
+                        <span data-lang-en style="display:none">Reserve Your Table</span>
+                    </h2>
+                    <p class="section-body light">
+                        <span data-lang-ar>ضمن مكانك في كافيه مزاج واستمتع بتجربة مميزة مع أصدقائك وعائلتك.</span>
+                        <span data-lang-en style="display:none">Secure your spot at Cafe Mazaj and enjoy a special experience with your friends and family.</span>
+                    </p>
+                    <ul class="reservation-perks mt-3">
+                        <li><i class="bi bi-check-circle-fill"></i>
+                            <span data-lang-ar>حجز مجاني بدون رسوم</span>
+                            <span data-lang-en style="display:none">Free reservation, no fees</span>
+                        </li>
+                        <li><i class="bi bi-check-circle-fill"></i>
+                            <span data-lang-ar>تأكيد فوري</span>
+                            <span data-lang-en style="display:none">Instant confirmation</span>
+                        </li>
+                        <li><i class="bi bi-check-circle-fill"></i>
+                            <span data-lang-ar>إلغاء مجاني</span>
+                            <span data-lang-en style="display:none">Free cancellation</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-7 gsap-slide-left">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+                        </div>
+                    }
+                    <form asp-controller="Reservation" asp-action="Index" method="post" class="reservation-form">
+                        @Html.AntiForgeryToken()
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" data-lang-ar>الاسم الكامل</label>
+                                <label class="form-label" data-lang-en style="display:none">Full Name</label>
+                                <input type="text" name="CustomerName" class="form-control cafe-input" required
+                                       placeholder="" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" data-lang-ar>رقم الهاتف</label>
+                                <label class="form-label" data-lang-en style="display:none">Phone Number</label>
+                                <input type="tel" name="Phone" class="form-control cafe-input" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" data-lang-ar>تاريخ الحجز</label>
+                                <label class="form-label" data-lang-en style="display:none">Date</label>
+                                <input type="date" name="ReservationDate" class="form-control cafe-input"
+                                       min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" data-lang-ar>عدد الأشخاص</label>
+                                <label class="form-label" data-lang-en style="display:none">Guests</label>
+                                <select name="GuestCount" class="form-select cafe-input">
+                                    @for (int i = 1; i <= 20; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" data-lang-ar>ملاحظات (اختياري)</label>
+                                <label class="form-label" data-lang-en style="display:none">Notes (optional)</label>
+                                <textarea name="Notes" class="form-control cafe-input" rows="2"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn cafe-btn-primary w-100 btn-lg">
+                                    <i class="bi bi-calendar-check me-2"></i>
+                                    <span data-lang-ar>تأكيد الحجز</span>
+                                    <span data-lang-en style="display:none">Confirm Reservation</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════ CONTACT ═══════════════════════════ -->
+<section class="contact-section section-padding" id="contact">
+    <div class="container">
+        <div class="text-center mb-5 gsap-fade-up">
+            <div class="section-label">
+                <span data-lang-ar>تواصل معنا</span>
+                <span data-lang-en style="display:none">Get In Touch</span>
+            </div>
+            <h2 class="section-title">
+                <span data-lang-ar>نحن هنا لمساعدتك</span>
+                <span data-lang-en style="display:none">We're Here For You</span>
+            </h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-5 gsap-slide-right">
+                <div class="contact-info-card">
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div>
+                            <h6 data-lang-ar>العنوان</h6>
+                            <h6 data-lang-en style="display:none">Address</h6>
+                            <p data-lang-ar>القاهرة، مصر</p>
+                            <p data-lang-en style="display:none">Cairo, Egypt</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-telephone-fill"></i></div>
+                        <div>
+                            <h6 data-lang-ar>الهاتف</h6>
+                            <h6 data-lang-en style="display:none">Phone</h6>
+                            <p><a href="tel:+20100000000">+20 100 000 0000</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-clock-fill"></i></div>
+                        <div>
+                            <h6 data-lang-ar>ساعات العمل</h6>
+                            <h6 data-lang-en style="display:none">Opening Hours</h6>
+                            <p data-lang-ar>يومياً: ٨ صباحاً – ١٢ منتصف الليل</p>
+                            <p data-lang-en style="display:none">Daily: 8:00 AM – 12:00 AM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 gsap-slide-left">
+                @if (TempData["ContactSuccess"] != null)
+                {
+                    <div class="alert alert-success"><i class="bi bi-check-circle-fill me-2"></i>@TempData["ContactSuccess"]</div>
+                }
+                <form asp-controller="Contact" asp-action="Index" method="post" class="contact-form">
+                    @Html.AntiForgeryToken()
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" data-lang-ar>الاسم</label>
+                            <label class="form-label" data-lang-en style="display:none">Name</label>
+                            <input type="text" name="SenderName" class="form-control cafe-input" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" data-lang-ar>البريد الإلكتروني</label>
+                            <label class="form-label" data-lang-en style="display:none">Email</label>
+                            <input type="email" name="Email" class="form-control cafe-input" required />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" data-lang-ar>الرسالة</label>
+                            <label class="form-label" data-lang-en style="display:none">Message</label>
+                            <textarea name="Message" class="form-control cafe-input" rows="4" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn cafe-btn-primary w-100 btn-lg">
+                                <i class="bi bi-send me-2"></i>
+                                <span data-lang-ar>إرسال الرسالة</span>
+                                <span data-lang-en style="display:none">Send Message</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/lang.js" asp-append-version="true"></script>
+}

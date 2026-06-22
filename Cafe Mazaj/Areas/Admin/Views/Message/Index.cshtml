@@ -1,0 +1,44 @@
+@model IEnumerable<Cafe_Mazaj.Models.Entities.ContactMessage>
+@{
+    ViewData["Title"] = "Messages";
+    var unread = Model.Count(m => !m.IsRead);
+}
+
+<div class="d-flex align-items-center gap-2 mb-3">
+    <h5 class="mb-0" style="color:var(--admin-text)">Inbox</h5>
+    @if (unread > 0)
+    {
+        <span class="badge rounded-pill" style="background:var(--admin-primary);color:white">@unread unread</span>
+    }
+</div>
+
+<div class="admin-card">
+    @foreach (var m in Model)
+    {
+        <a asp-area="Admin" asp-controller="Message" asp-action="Detail" asp-route-id="@m.Id"
+           class="d-flex align-items-start gap-3 p-3 border-bottom @(m.IsRead ? "" : "unread-row")"
+           style="border-color:var(--admin-border)!important;text-decoration:none;color:inherit;transition:background 0.2s">
+            <div style="width:10px;height:10px;background:@(m.IsRead ? "transparent" : "var(--admin-primary)");border-radius:50%;margin-top:6px;flex-shrink:0"></div>
+            <div style="flex:1;min-width:0">
+                <div class="d-flex justify-content-between">
+                    <span class="fw-@(m.IsRead ? "normal" : "semibold")">@m.SenderName</span>
+                    <span style="font-size:0.8rem;color:var(--admin-muted)">@m.ReceivedAt.ToString("dd MMM, HH:mm")</span>
+                </div>
+                <div style="font-size:0.8rem;color:var(--admin-muted)">@m.Email</div>
+                <div class="text-truncate" style="font-size:0.875rem;color:var(--admin-muted)">@m.Message</div>
+            </div>
+        </a>
+    }
+    @if (!Model.Any())
+    {
+        <div class="p-4 text-center" style="color:var(--admin-muted)">
+            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+            No messages yet.
+        </div>
+    }
+</div>
+
+<style>
+    .unread-row { background: rgba(200,135,58,0.04); }
+    .unread-row:hover { background: rgba(200,135,58,0.08); }
+</style>

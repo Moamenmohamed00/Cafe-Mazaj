@@ -1,0 +1,41 @@
+@model IEnumerable<Cafe_Mazaj.Models.Entities.GalleryImage>
+@{
+    ViewData["Title"] = "Gallery";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0" style="color:var(--admin-text)">Gallery (@Model.Count() images)</h5>
+    <a asp-area="Admin" asp-controller="Gallery" asp-action="Upload" class="btn-admin-primary">
+        <i class="bi bi-upload"></i> Upload Image
+    </a>
+</div>
+
+<div class="gallery-grid">
+    @foreach (var img in Model)
+    {
+        <div class="gallery-grid-item">
+            <img src="@img.ImagePath" alt="@img.AltTextEn" loading="lazy" />
+            <div class="gallery-item-overlay">
+                <form asp-area="Admin" asp-controller="Gallery" asp-action="Delete" asp-route-id="@img.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-danger" data-confirm="Delete this image?">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+            </div>
+            @if (!string.IsNullOrEmpty(img.Tag))
+            {
+                <div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.6);color:white;font-size:0.7rem;padding:2px 8px;border-radius:100px">@img.Tag</div>
+            }
+        </div>
+    }
+    @if (!Model.Any())
+    {
+        <div class="admin-card p-4 text-center col-span-full" style="grid-column:1/-1;color:var(--admin-muted)">
+            <i class="bi bi-images fs-2 d-block mb-2"></i>
+            No images uploaded yet.
+        </div>
+    }
+</div>
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

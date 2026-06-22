@@ -1,0 +1,113 @@
+@model Cafe_Mazaj.Models.ViewModels.MenuViewModel
+@{
+    ViewData["Title"] = "Menu — Cafe Mazaj";
+}
+
+<div style="padding-top:80px; min-height:100vh; background:var(--color-bg)">
+    <div class="container" style="padding:60px 0">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <div class="section-label">
+                <span data-lang-ar>قائمتنا</span>
+                <span data-lang-en style="display:none">Our Menu</span>
+            </div>
+            <h1 class="section-title">
+                <span data-lang-ar>اكتشف نكهاتنا</span>
+                <span data-lang-en style="display:none">Discover Our Flavors</span>
+            </h1>
+            <!-- Search -->
+            <div class="row justify-content-center mt-3">
+                <div class="col-md-5">
+                    <input type="text" id="menuSearch" class="form-control cafe-input"
+                           placeholder="Search menu... / ابحث في القائمة" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <ul class="nav nav-pills justify-content-center gap-2 mb-5 flex-wrap" id="categoryTabs">
+            <li class="nav-item">
+                <a class="nav-link @(Model.SelectedCategoryId == null ? "active-tab" : "inactive-tab")"
+                   asp-controller="Menu" asp-action="Index">
+                    <span data-lang-ar>الكل</span>
+                    <span data-lang-en style="display:none">All</span>
+                </a>
+            </li>
+            @foreach (var cat in Model.Categories)
+            {
+                <li class="nav-item">
+                    <a class="nav-link @(Model.SelectedCategoryId == cat.Id ? "active-tab" : "inactive-tab")"
+                       asp-controller="Menu" asp-action="Index" asp-route-categoryId="@cat.Id">
+                        <span data-lang-ar>@cat.NameAr</span>
+                        <span data-lang-en style="display:none">@cat.NameEn</span>
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <!-- Products Grid -->
+        <div class="row g-4" id="menuGrid">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-md-6 col-lg-4 menu-item" data-name-en="@product.NameEn.ToLower()" data-name-ar="@product.NameAr">
+                    <div class="product-card h-100">
+                        <div class="product-img-wrap">
+                            @if (!string.IsNullOrEmpty(product.ImagePath))
+                            {
+                                <img src="@product.ImagePath" alt="@product.NameEn" class="product-img" loading="lazy" />
+                            }
+                            else
+                            {
+                                <div class="product-img-placeholder"><i class="bi bi-cup-hot"></i></div>
+                            }
+                            <div class="product-price-badge">@product.Price EGP</div>
+                        </div>
+                        <div class="product-body">
+                            <div class="product-category">
+                                <span data-lang-ar>@product.Category?.NameAr</span>
+                                <span data-lang-en style="display:none">@product.Category?.NameEn</span>
+                            </div>
+                            <h3 class="product-name">
+                                <span data-lang-ar>@product.NameAr</span>
+                                <span data-lang-en style="display:none">@product.NameEn</span>
+                            </h3>
+                            <p class="product-desc">
+                                <span data-lang-ar>@product.DescriptionAr</span>
+                                <span data-lang-en style="display:none">@product.DescriptionEn</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (!Model.Products.Any())
+            {
+                <div class="col-12 text-center py-5" style="color:var(--color-muted)">
+                    <i class="bi bi-cup fs-1 d-block mb-2"></i>
+                    <span data-lang-ar>لا توجد منتجات في هذا القسم.</span>
+                    <span data-lang-en style="display:none">No items in this category.</span>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .active-tab { background: var(--color-primary) !important; color: white !important; border: none; }
+    .inactive-tab { background: transparent !important; color: var(--color-muted) !important; border: 1px solid var(--color-border) !important; }
+    .inactive-tab:hover { border-color: var(--color-primary) !important; color: var(--color-primary) !important; background: rgba(200,135,58,0.1) !important; }
+    .menu-item.hidden { display: none !important; }
+</style>
+
+@section Scripts {
+    <script src="~/js/lang.js" asp-append-version="true"></script>
+    <script>
+        document.getElementById('menuSearch').addEventListener('input', function () {
+            const q = this.value.toLowerCase();
+            document.querySelectorAll('.menu-item').forEach(item => {
+                const nameEn = item.getAttribute('data-name-en') || '';
+                const nameAr = item.getAttribute('data-name-ar') || '';
+                item.classList.toggle('hidden', !nameEn.includes(q) && !nameAr.includes(q));
+            });
+        });
+    </script>
+}

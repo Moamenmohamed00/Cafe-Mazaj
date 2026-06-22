@@ -1,0 +1,147 @@
+@model Cafe_Mazaj.Models.ViewModels.Admin.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Stats Row -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon gold"><i class="bi bi-cup-hot"></i></div>
+            <div>
+                <div class="stat-number">@Model.TotalProducts</div>
+                <div class="stat-label">Total Products</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon green"><i class="bi bi-calendar-check"></i></div>
+            <div>
+                <div class="stat-number">@Model.PendingReservations</div>
+                <div class="stat-label">Pending Reservations</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon red"><i class="bi bi-envelope"></i></div>
+            <div>
+                <div class="stat-number">@Model.UnreadMessages</div>
+                <div class="stat-label">Unread Messages</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon blue"><i class="bi bi-images"></i></div>
+            <div>
+                <div class="stat-number">@Model.TotalGalleryImages</div>
+                <div class="stat-label">Gallery Images</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reservation Summary -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-icon gold"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+                <div class="stat-number">@Model.PendingReservations</div>
+                <div class="stat-label">Pending</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-icon green"><i class="bi bi-check-circle"></i></div>
+            <div>
+                <div class="stat-number">@Model.ApprovedReservations</div>
+                <div class="stat-label">Approved</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-icon red"><i class="bi bi-x-circle"></i></div>
+            <div>
+                <div class="stat-number">@Model.RejectedReservations</div>
+                <div class="stat-label">Rejected</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row g-3">
+    <!-- Recent Reservations -->
+    <div class="col-lg-7">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h6 class="admin-card-title"><i class="bi bi-calendar-check me-2"></i>Recent Reservations</h6>
+                <a asp-area="Admin" asp-controller="Reservation" asp-action="Index" class="btn-admin-outline btn-sm">View All</a>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Phone</th>
+                            <th>Date</th>
+                            <th>Guests</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.RecentReservations)
+                        {
+                            <tr>
+                                <td>@r.CustomerName</td>
+                                <td>@r.Phone</td>
+                                <td>@r.ReservationDate</td>
+                                <td>@r.GuestCount</td>
+                                <td>
+                                    <span class="admin-badge badge-@r.Status.ToLower()">@r.Status</span>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.RecentReservations.Any())
+                        {
+                            <tr><td colspan="5" class="text-center text-muted py-3">No reservations yet.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Messages -->
+    <div class="col-lg-5">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h6 class="admin-card-title"><i class="bi bi-envelope me-2"></i>Recent Messages</h6>
+                <a asp-area="Admin" asp-controller="Message" asp-action="Index" class="btn-admin-outline btn-sm">View All</a>
+            </div>
+            <div class="admin-card-body p-0">
+                @foreach (var m in Model.RecentMessages)
+                {
+                    <a asp-area="Admin" asp-controller="Message" asp-action="Detail" asp-route-id="@m.Id"
+                       class="d-flex align-items-start gap-2 p-3 border-bottom" style="border-color:var(--admin-border)!important; text-decoration:none; color:inherit;">
+                        <div style="width:8px;height:8px;background:@(m.IsRead ? "transparent" : "#C8873A");border-radius:50%;margin-top:6px;flex-shrink:0"></div>
+                        <div style="min-width:0">
+                            <div class="fw-semibold text-truncate" style="font-size:0.875rem">@m.SenderName</div>
+                            <div style="font-size:0.8rem;color:var(--admin-muted)" class="text-truncate">@m.Message</div>
+                            <div style="font-size:0.75rem;color:var(--admin-muted)">@m.ReceivedAt.ToString("MMM dd, HH:mm")</div>
+                        </div>
+                    </a>
+                }
+                @if (!Model.RecentMessages.Any())
+                {
+                    <div class="p-3 text-center text-muted">No messages yet.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

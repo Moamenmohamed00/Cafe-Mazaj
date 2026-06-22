@@ -1,0 +1,52 @@
+@{
+    ViewData["Title"] = "Upload Image";
+}
+<div class="row justify-content-center"><div class="col-md-6">
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h6 class="admin-card-title">Upload Gallery Image</h6>
+        <a asp-area="Admin" asp-controller="Gallery" asp-action="Index" class="btn-admin-outline btn-sm">← Back</a>
+    </div>
+    <div class="admin-card-body">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                { <div>@err.ErrorMessage</div> }
+            </div>
+        }
+        <form asp-area="Admin" asp-controller="Gallery" asp-action="Upload" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+                <label class="admin-form-label">Image File (JPG, PNG, WebP) *</label>
+                <input type="file" name="imageFile" id="imageFileInput" class="form-control admin-input" accept="image/*" required />
+                <img id="imagePreview" src="" alt="Preview" class="product-img-preview mt-2" style="display:none;width:150px;height:150px" />
+            </div>
+            <div class="mb-3">
+                <label class="admin-form-label">Alt Text (English)</label>
+                <input type="text" name="altTextEn" class="form-control admin-input" />
+            </div>
+            <div class="mb-3">
+                <label class="admin-form-label">Alt Text (Arabic)</label>
+                <input type="text" name="altTextAr" class="form-control admin-input" dir="rtl" />
+            </div>
+            <div class="mb-3">
+                <label class="admin-form-label">Tag</label>
+                <select name="tag" class="form-select admin-input">
+                    <option value="">— None —</option>
+                    <option>Food</option>
+                    <option>Drinks</option>
+                    <option>Ambiance</option>
+                    <option>Events</option>
+                </select>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn-admin-primary"><i class="bi bi-upload"></i> Upload</button>
+                <a asp-area="Admin" asp-controller="Gallery" asp-action="Index" class="btn-admin-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</div></div>
+
+@section Scripts { <script src="~/js/admin.js" asp-append-version="true"></script> }

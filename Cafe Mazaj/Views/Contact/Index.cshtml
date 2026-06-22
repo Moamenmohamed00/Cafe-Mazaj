@@ -1,0 +1,103 @@
+@model Cafe_Mazaj.Models.ViewModels.ContactFormViewModel
+@{
+    ViewData["Title"] = "Contact Us | Cafe Mazaj";
+}
+
+<div style="padding-top:80px;min-height:100vh;background:var(--color-bg-2)">
+    <div class="container" style="padding:60px 0">
+        <div class="text-center mb-5">
+            <div class="section-label">
+                <span data-lang-ar>تواصل معنا</span>
+                <span data-lang-en style="display:none">Contact Us</span>
+            </div>
+            <h1 class="section-title">
+                <span data-lang-ar>نحن هنا لمساعدتك</span>
+                <span data-lang-en style="display:none">We're Here For You</span>
+            </h1>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert mb-4" style="background:rgba(16,185,129,0.15);border:1px solid #10B981;color:#10B981;border-radius:12px;padding:1.25rem">
+                <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+            </div>
+        }
+
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="contact-info-card">
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div>
+                            <h6 data-lang-ar>العنوان</h6><h6 data-lang-en style="display:none">Address</h6>
+                            <p data-lang-ar>القاهرة، مصر</p><p data-lang-en style="display:none">Cairo, Egypt</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-telephone-fill"></i></div>
+                        <div>
+                            <h6 data-lang-ar>الهاتف</h6><h6 data-lang-en style="display:none">Phone</h6>
+                            <p><a href="tel:+20100000000">+20 100 000 0000</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-clock-fill"></i></div>
+                        <div>
+                            <h6 data-lang-ar>ساعات العمل</h6><h6 data-lang-en style="display:none">Hours</h6>
+                            <p data-lang-ar>يومياً ٨ص – ١٢م</p><p data-lang-en style="display:none">Daily 8AM – 12AM</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-envelope-fill"></i></div>
+                        <div>
+                            <h6>Email</h6>
+                            <p><a href="mailto:hello@cafemamazaj.com">hello@cafemamazaj.com</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:2.5rem">
+                    <form asp-controller="Contact" asp-action="Index" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" style="color:var(--color-muted)">
+                                    <span data-lang-ar>الاسم *</span><span data-lang-en style="display:none">Name *</span>
+                                </label>
+                                <input asp-for="SenderName" class="form-control cafe-input" />
+                                <span asp-validation-for="SenderName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" style="color:var(--color-muted)">
+                                    <span data-lang-ar>البريد الإلكتروني *</span><span data-lang-en style="display:none">Email *</span>
+                                </label>
+                                <input asp-for="Email" type="email" class="form-control cafe-input" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" style="color:var(--color-muted)">
+                                    <span data-lang-ar>الرسالة *</span><span data-lang-en style="display:none">Message *</span>
+                                </label>
+                                <textarea asp-for="Message" class="form-control cafe-input" rows="5"></textarea>
+                                <span asp-validation-for="Message" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn cafe-btn-primary w-100 btn-lg">
+                                    <i class="bi bi-send me-2"></i>
+                                    <span data-lang-ar>إرسال</span>
+                                    <span data-lang-en style="display:none">Send Message</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/lang.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,87 @@
+@model Cafe_Mazaj.Models.ViewModels.ReservationFormViewModel
+@{
+    ViewData["Title"] = "Reserve a Table | Cafe Mazaj";
+}
+
+<div style="padding-top:80px;min-height:100vh;background:var(--color-bg)">
+    <div class="container" style="padding:60px 0; max-width:700px">
+        <div class="text-center mb-5">
+            <div class="section-label">
+                <span data-lang-ar>الحجز</span>
+                <span data-lang-en style="display:none">Reservation</span>
+            </div>
+            <h1 class="section-title">
+                <span data-lang-ar>احجز طاولتك</span>
+                <span data-lang-en style="display:none">Book Your Table</span>
+            </h1>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert" style="background:rgba(16,185,129,0.15);border:1px solid #10B981;color:#10B981;border-radius:12px;padding:1.25rem">
+                <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+            </div>
+        }
+
+        <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:2.5rem">
+            <form asp-controller="Reservation" asp-action="Index" method="post">
+                @Html.AntiForgeryToken()
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="CustomerName" class="form-label" style="color:var(--color-muted)">
+                            <span data-lang-ar>الاسم الكامل *</span>
+                            <span data-lang-en style="display:none">Full Name *</span>
+                        </label>
+                        <input asp-for="CustomerName" class="form-control cafe-input" />
+                        <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Phone" class="form-label" style="color:var(--color-muted)">
+                            <span data-lang-ar>رقم الهاتف *</span>
+                            <span data-lang-en style="display:none">Phone Number *</span>
+                        </label>
+                        <input asp-for="Phone" class="form-control cafe-input" />
+                        <span asp-validation-for="Phone" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ReservationDate" class="form-label" style="color:var(--color-muted)">
+                            <span data-lang-ar>تاريخ الحجز *</span>
+                            <span data-lang-en style="display:none">Date *</span>
+                        </label>
+                        <input asp-for="ReservationDate" type="date" class="form-control cafe-input"
+                               min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="ReservationDate" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="GuestCount" class="form-label" style="color:var(--color-muted)">
+                            <span data-lang-ar>عدد الأشخاص *</span>
+                            <span data-lang-en style="display:none">Number of Guests *</span>
+                        </label>
+                        <select asp-for="GuestCount" class="form-select cafe-input">
+                            @for (int i = 1; i <= 20; i++) { <option value="@i">@i</option> }
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Notes" class="form-label" style="color:var(--color-muted)">
+                            <span data-lang-ar>ملاحظات (اختياري)</span>
+                            <span data-lang-en style="display:none">Notes (optional)</span>
+                        </label>
+                        <textarea asp-for="Notes" class="form-control cafe-input" rows="3"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn cafe-btn-primary w-100 btn-lg">
+                            <i class="bi bi-calendar-check me-2"></i>
+                            <span data-lang-ar>تأكيد الحجز</span>
+                            <span data-lang-en style="display:none">Confirm Reservation</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/lang.js" asp-append-version="true"></script>
+}
