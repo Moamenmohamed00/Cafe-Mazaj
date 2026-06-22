@@ -54,16 +54,10 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
-// ── Route: Admin Area ─────────────────────────────────────
+// ── Route: Admin Area (must come before default) ─────────
 app.MapControllerRoute(
     name: "admin",
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
-
-// ── Route: Auth (Login/Logout) ────────────────────────────
-app.MapControllerRoute(
-    name: "auth",
-    pattern: "admin/{action=Login}/{id?}",
-    defaults: new { controller = "Auth" });
 
 // ── Route: Default ────────────────────────────────────────
 app.MapControllerRoute(

@@ -69,10 +69,10 @@
                 <i class="bi bi-person-circle fs-4"></i>
                 <div>
                     <div class="fw-semibold">Administrator</div>
-                    <div class="text-muted small">@Context.Session.GetString("AdminUsername")</div>
+                    <div class="small" style="color: var(--admin-muted);">@Context.Session.GetString("AdminUsername")</div>
                 </div>
             </div>
-            <form asp-controller="Auth" asp-action="Logout" asp-area="" method="post" class="mt-2">
+            <form asp-area="Admin" asp-controller="Auth" asp-action="Logout" method="post" class="mt-2">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn btn-sm btn-outline-danger w-100">
                     <i class="bi bi-box-arrow-right"></i> Logout

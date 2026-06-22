@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cafe_Mazaj.Controllers
+namespace Cafe_Mazaj.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class AuthController : Controller
     {
         private readonly IConfiguration _config;
@@ -11,6 +12,7 @@ namespace Cafe_Mazaj.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            // If already logged in, go to dashboard directly
             if (HttpContext.Session.GetString("AdminLoggedIn") == "true")
                 return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
             return View();
@@ -37,7 +39,7 @@ namespace Cafe_Mazaj.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Login");
+            return RedirectToAction("Login", "Auth", new { area = "Admin" });
         }
     }
 }

@@ -8,9 +8,10 @@ namespace Cafe_Mazaj.Filters
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var isLoggedIn = context.HttpContext.Session.GetString("AdminLoggedIn");
-            if (string.IsNullOrEmpty(isLoggedIn))
+            if (string.IsNullOrEmpty(isLoggedIn) || isLoggedIn != "true")
             {
-                context.Result = new RedirectToActionResult("Login", "Auth", new { area = "" });
+                // Redirect to Admin area's AuthController.Login
+                context.Result = new RedirectToActionResult("Login", "Auth", new { area = "Admin" });
             }
             base.OnActionExecuting(context);
         }

@@ -263,6 +263,19 @@ body.admin-body {
 .admin-input::placeholder { color: var(--admin-muted) !important; }
 .admin-input option { background: var(--admin-surface-2); color: var(--admin-text); }
 
+/* ── CHECKBOXES ────────────────────────────────────── */
+.form-check-input {
+  background-color: var(--admin-surface-2);
+  border-color: var(--admin-border);
+}
+.form-check-input:checked {
+  background-color: var(--admin-primary);
+  border-color: var(--admin-primary);
+}
+.form-check-label.text-muted {
+  color: var(--admin-text) !important;
+}
+
 /* ── ACTION BUTTONS ──────────────────────────────── */
 .btn-admin-primary {
   background: var(--admin-primary);
