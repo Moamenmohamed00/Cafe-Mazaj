@@ -187,6 +187,18 @@ html[lang="en"] .section-title { font-family: var(--font-heading-en); }
 }
 
 /* ── HERO ─────────────────────────────────────────── */
+.hero-video-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translateX(-50%) translateY(-50%);
+  object-fit: cover;
+  z-index: 0;
+}
 .hero-section {
   position: relative;
   min-height: 100vh;
