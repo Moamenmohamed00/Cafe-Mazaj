@@ -3,8 +3,8 @@
     ViewData["Title"] = "Menu — Cafe Mazaj";
 }
 
-<div style="padding-top:80px; min-height:100vh; background:var(--color-bg)">
-    <div class="container" style="padding:60px 0">
+<div class="menu-page">
+    <div class="container">
         <!-- Header -->
         <div class="text-center mb-5">
             <div class="section-label">
@@ -46,7 +46,7 @@
         </ul>
 
         <!-- Products Grid -->
-        <div class="row g-4" id="menuGrid">
+        <div class="row g-4 product-grid" id="menuGrid">
             @foreach (var product in Model.Products)
             {
                 <div class="col-md-6 col-lg-4 menu-item" data-name-en="@product.NameEn.ToLower()" data-name-ar="@product.NameAr">
@@ -90,13 +90,6 @@
         </div>
     </div>
 </div>
-
-<style>
-    .active-tab { background: var(--color-primary) !important; color: white !important; border: none; }
-    .inactive-tab { background: transparent !important; color: var(--color-muted) !important; border: 1px solid var(--color-border) !important; }
-    .inactive-tab:hover { border-color: var(--color-primary) !important; color: var(--color-primary) !important; background: rgba(200,135,58,0.1) !important; }
-    .menu-item.hidden { display: none !important; }
-</style>
 
 @section Scripts {
     <script src="~/js/lang.js" asp-append-version="true"></script>
