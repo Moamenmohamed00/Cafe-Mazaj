@@ -23,7 +23,7 @@ namespace Cafe_Mazaj.Controllers
             var vm = new HomeViewModel
             {
                 FeaturedProducts = await _products.GetFeaturedAsync(6),
-                GalleryPreview   = (await _gallery.GetAllAsync()).Take(6)
+                GalleryPreview   = await _gallery.GetPreviewAsync(6)  // SQL-level limit, no waste
             };
             return View(vm);
         }

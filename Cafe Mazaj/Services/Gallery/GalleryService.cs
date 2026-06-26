@@ -12,6 +12,9 @@ namespace Cafe_Mazaj.Services.Gallery
         public async Task<IEnumerable<GalleryImage>> GetAllAsync()
             => await _db.GalleryImages.OrderBy(g => g.SortOrder).ThenByDescending(g => g.UploadedAt).ToListAsync();
 
+        public async Task<IEnumerable<GalleryImage>> GetPreviewAsync(int count = 6)
+            => await _db.GalleryImages.OrderBy(g => g.SortOrder).ThenByDescending(g => g.UploadedAt).Take(count).ToListAsync();
+
         public async Task<GalleryImage?> GetByIdAsync(int id)
             => await _db.GalleryImages.FindAsync(id);
 

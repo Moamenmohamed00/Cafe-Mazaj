@@ -20,6 +20,7 @@ namespace Cafe_Mazaj.Services.Product
         public async Task<IEnumerable<ProductEntity>> GetFeaturedAsync(int count = 6)
             => await _db.Products.Include(p => p.Category)
                 .Where(p => p.IsFeatured && p.IsAvailable)
+                .OrderBy(p => p.Id)
                 .Take(count).ToListAsync();
 
         public async Task<ProductEntity?> GetByIdAsync(int id)

@@ -167,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   }
 
+  // ── Hero: Animated canvas background ─────────────────────────────
   function initHeroCanvas() {
     const canvas = document.getElementById('hero-canvas');
     if (!canvas) return;
@@ -174,9 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let width = 0;
-    let height = 0;
-    let rafId = 0;
+    let width = 0, height = 0;
     let particles = [];
     const particleCount = reducedMotion ? 0 : Math.min(90, Math.max(42, Math.floor(window.innerWidth / 22)));
 
@@ -190,7 +189,6 @@ document.addEventListener('DOMContentLoaded', function () {
       canvas.style.height = height + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       particles = createParticles(particleCount);
-      drawFrame();
     }
 
     function createParticles(count) {
@@ -215,47 +213,42 @@ document.addEventListener('DOMContentLoaded', function () {
       ctx.fillStyle = base;
       ctx.fillRect(0, 0, width, height);
 
-      paintGlow(width * 0.74, height * 0.28, Math.min(width, height) * 0.52, 'rgba(200, 135, 58, 0.12)');
-      paintGlow(width * 0.18, height * 0.78, Math.min(width, height) * 0.44, 'rgba(232, 201, 154, 0.075)');
+      // warm gold glows
+      paintGlow(width * 0.74, height * 0.28, Math.min(width, height) * 0.52, 'rgba(200,135,58,0.12)');
+      paintGlow(width * 0.18, height * 0.78, Math.min(width, height) * 0.44, 'rgba(232,201,154,0.075)');
     }
 
     function paintGlow(x, y, radius, color) {
       const glow = ctx.createRadialGradient(x, y, 0, x, y, radius);
       glow.addColorStop(0, color);
-      glow.addColorStop(1, 'rgba(200, 135, 58, 0)');
+      glow.addColorStop(1, 'rgba(200,135,58,0)');
       ctx.fillStyle = glow;
       ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
     }
 
     function drawParticles() {
-      particles.forEach(function (particle) {
-        particle.drift += 0.006;
-        particle.x += particle.vx + Math.sin(particle.drift) * 0.05;
-        particle.y += particle.vy;
-
-        if (particle.y < -8) {
-          particle.y = height + 8;
-          particle.x = Math.random() * width;
-        }
-
-        if (particle.x < -8) particle.x = width + 8;
-        if (particle.x > width + 8) particle.x = -8;
-
+      particles.forEach(function (p) {
+        p.drift += 0.006;
+        p.x += p.vx + Math.sin(p.drift) * 0.05;
+        p.y += p.vy;
+        if (p.y < -8) { p.y = height + 8; p.x = Math.random() * width; }
+        if (p.x < -8) p.x = width + 8;
+        if (p.x > width + 8) p.x = -8;
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(232, 201, 154, ' + particle.alpha + ')';
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(232,201,154,' + p.alpha + ')';
         ctx.fill();
       });
     }
 
-    function drawFrame() {
+    let rafId = null;
+    let isVisible = true;
+
+    function tick() {
+      if (!isVisible) return; // paused when hero is off-screen
       ctx.clearRect(0, 0, width, height);
       paintBackground();
       drawParticles();
-    }
-
-    function tick() {
-      drawFrame();
       rafId = window.requestAnimationFrame(tick);
     }
 
@@ -263,9 +256,26 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', debounce(resize, 160), { passive: true });
 
     if (!reducedMotion) {
+      // Pause canvas when hero is not in viewport — saves CPU/GPU during scroll
+      if ('IntersectionObserver' in window) {
+        const heroObserver = new IntersectionObserver(function (entries) {
+          const entry = entries[0];
+          if (entry.isIntersecting) {
+            isVisible = true;
+            if (!rafId) tick(); // resume
+          } else {
+            isVisible = false;
+            if (rafId) { window.cancelAnimationFrame(rafId); rafId = null; }
+          }
+        }, { threshold: 0 });
+        heroObserver.observe(canvas.parentElement || canvas);
+      }
       tick();
+    } else {
+      paintBackground(); // static bg for reduced-motion users
     }
   }
+
 
   function initLightbox() {
     if (typeof GLightbox !== 'undefined') {
